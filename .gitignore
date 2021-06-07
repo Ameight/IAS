@@ -1,0 +1,8 @@
+/build/
+/.idea/
+/Docs/
+/gradle/
+/.gradle/
+.java_pid*
+*.hprof
+/java_pid*/
