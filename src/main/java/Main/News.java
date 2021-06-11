@@ -1,11 +1,13 @@
 package Main;
 
 public class News {
+
     private String date;
     private String company;
     private String url_company;
     private String article;
     private String url_article;
+    private int rating;
 
     public News(String date, String company, String url_company, String article, String url_article) {
         this.date = date;
@@ -13,6 +15,7 @@ public class News {
         this.url_company = url_company;
         this.article = article;
         this.url_article = url_article;
+        this.rating = 0;
     } // Конструктор с параметрами
 
     @Override
@@ -58,5 +61,13 @@ public class News {
 
     public void setUrl_article(String url_article) {
         this.url_article = url_article;
+    }
+
+    public void estRating(int rating){
+        this.rating = rating;
+    }
+
+    public int getRating(){
+        return this.rating;
     }
 } // Класс и методы для работы с новостями

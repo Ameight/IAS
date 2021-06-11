@@ -7,7 +7,7 @@ plugins {
 // плагины которые конфигуриет сам градл, аналог MAKEFILE
 version = "1.0"
 
-sourceSets.main{
+sourceSets.main {
     java.srcDirs("src/main/Main", "src/main/Controllers", "src/main/Models", "src/main/Util")
     resources.srcDirs("src/main/resources/css", "src/main/resources/Fxml")
 } // исходники
@@ -39,8 +39,8 @@ configure<JavaPluginConvention> {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-tasks.jar{
-    manifest{
+tasks.jar {
+    manifest {
         attributes(
                 "Main-Class" to application.mainClass.get()
         )
