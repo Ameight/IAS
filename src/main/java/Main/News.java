@@ -63,8 +63,12 @@ public class News {
         this.url_article = url_article;
     }
 
-    public void estRating(int rating){
+    public void setRating(int rating){
         this.rating = rating;
+    }
+
+    public void addRating(int rating){
+        this.rating += rating;
     }
 
     public int getRating(){

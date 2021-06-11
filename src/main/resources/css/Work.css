@@ -9,6 +9,7 @@
 /**
  * Base
  */
+
 .root {
     -fx-background-color: #ffffff;
 }
@@ -1258,4 +1259,18 @@ VBox > .split-menu-button.last > .arrow-button {
 
 .slider:vertical .track {
     -fx-pref-width: 5;
+}
+
+.goodCompany{
+    -fx-background-color: #99bb96;
+}
+.averageCompany{
+    -fx-background-color: #d58512;
+}
+.badCompany{
+    -fx-background-color: #a94442;
+}
+
+.goodCompany:selected, .averageCompany:selected, .badCompany:selected{
+    -fx-background-color: #8bb3ec;
 }

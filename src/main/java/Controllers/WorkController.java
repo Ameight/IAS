@@ -9,6 +9,8 @@ import Main.Parser;
 import Main.XLSXGenerator;
 import Util.LocaleDataOpen;
 import Util.LocaleDataSave;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -19,6 +21,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.util.Callback;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.sql.rowset.serial.SerialBlob;
@@ -68,19 +71,19 @@ public class WorkController {
     @FXML
     public void initialize() {
         dataBase = new DataBase();
-        if(dataBase.getConnection() != null){
+        if (dataBase.getConnection() != null) {
             dataBase._defaultInit();
             usingDataBase = true;
         } // создание и инициализации БД
     }
 
-    private boolean _checkBdProperties(){
+    private boolean _checkBdProperties() {
         boolean telegramId = _parent.getNameTelegram() != null;
-        return telegramId  && usingDataBase;
+        return telegramId && usingDataBase;
     } //
 
     private void _initInputNames() {
-        if(!_checkBdProperties()) {
+        if (!_checkBdProperties()) {
             //System.out.println("Heere !! ! ");
             LocaleDataOpen localeDataOpen = new LocaleDataOpen(pathTempInputNames);
             Object tmp = localeDataOpen.getData();
@@ -89,19 +92,19 @@ public class WorkController {
             } else {
                 names = new InputNames();
             }
-        }else{
+        } else {
             try {
                 PreparedStatement selectInputNames = dataBase.connection.prepareStatement("SELECT dataInputName FROM inputcashe WHERE idUserTelegram = ?");
                 selectInputNames.setString(1, _parent.getNameTelegram());
                 ResultSet namesObject = selectInputNames.executeQuery();
-                if(namesObject.next()){
+                if (namesObject.next()) {
                     Blob temtBlobInputnames = namesObject.getBlob("dataInputName");
-                    if(temtBlobInputnames != null) {
+                    if (temtBlobInputnames != null) {
                         ObjectInputStream iInputNames = new ObjectInputStream(namesObject.getBlob("dataInputName").getBinaryStream());
                         names = (InputNames) iInputNames.readObject();
                     }
                 }
-                if(names == null){
+                if (names == null) {
                     names = new InputNames();
                 }
             } catch (SQLException | ClassNotFoundException | IOException throwables) {
@@ -111,12 +114,12 @@ public class WorkController {
         _updateInputNames();
     } // Перезапуск окна work, подугрузка истории запросов
 
-    private void _updateInputNames(){
+    private void _updateInputNames() {
         inputNameCompany.getItems().clear();
         inputNameCompany.getItems().addAll(names);
     } // Обновление истории запросов
 
-    public void attachMainClass(Main main){
+    public void attachMainClass(Main main) {
         _parent = main;
         _initInputNames();
 
@@ -129,9 +132,33 @@ public class WorkController {
             @Override
             public void onChanged(Change<? extends ArticleTable> c) {
                 companyToLoadData.clear();
-                tableArticles.getSelectionModel().getSelectedItems().forEach(item ->{
+                tableArticles.getSelectionModel().getSelectedItems().forEach(item -> {
                     companyToLoadData.add(parsedData.get(item.getPosition()));
                 });
+            }
+        });
+
+        tableArticles.setRowFactory(new Callback<TableView<ArticleTable>, TableRow<ArticleTable>>() {
+            @Override
+            public TableRow<ArticleTable> call(TableView<ArticleTable> param) {
+                return new TableRow<ArticleTable>(){
+                    @Override
+                    protected void updateItem(ArticleTable item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if(!empty){
+                            int tempRating = parsedData.get(item.getPosition()).getRating();
+                            if(tempRating >= 100){
+                                getStyleClass().add("goodCompany");
+                                return;
+                            }
+                            if(tempRating >= 50){
+                                getStyleClass().add("averageCompany");
+                                return;
+                            }
+                            getStyleClass().add("badCompany");
+                        }
+                    }
+                };
             }
         });
 
@@ -139,13 +166,13 @@ public class WorkController {
     } // Добавляет класс для того чтоб делать запросы, чтоб менять
 
     @FXML
-    public void submit(KeyEvent event){
-        if(event.getCode() == KeyCode.ENTER){
+    public void submit(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
             names.add(inputNameCompany.getEditor().getText());
-            if(!_checkBdProperties()){
+            if (!_checkBdProperties()) {
                 LocaleDataSave save = new LocaleDataSave(pathTempInputNames, names);
                 save.save();
-            }else{
+            } else {
                 PreparedStatement statement = null;
                 try {
                     statement = dataBase.connection.prepareStatement("update inputcashe set `dataInputName` = ?");
@@ -163,7 +190,7 @@ public class WorkController {
             stateProgram.setText("Выполнение запроса");
             Task<List<News>> running = new Task<List<News>>() {
                 @Override
-                protected List<News> call(){
+                protected List<News> call() {
                     Parser parser = new Parser();
                     List<News> tempNews = null;
                     try {
@@ -178,7 +205,7 @@ public class WorkController {
                 _parseData(running.getValue());
                 running.cancel();
             });
-            running.setOnFailed(ev ->{
+            running.setOnFailed(ev -> {
                 stateProgram.setText("Ошибка запроса");
                 running.cancel();
             });
@@ -192,14 +219,14 @@ public class WorkController {
             return;
         }
         dataTable.clear();
-        newData.iterator().forEachRemaining(item ->{
+        newData.iterator().forEachRemaining(item -> {
             parsedData.add(item);
         });
 
         ListIterator iter = parsedData.listIterator();
         int tempDataTableSize = dataTable.size();
-        while(iter.hasNext()){
-            int  index = tempDataTableSize + iter.nextIndex();
+        while (iter.hasNext()) {
+            int index = tempDataTableSize + iter.nextIndex();
             News article = (News) iter.next();
             _addItemToTable(index, article.getCompany(), article.getArticle());
         }
@@ -207,12 +234,12 @@ public class WorkController {
         stateProgram.setText("Выполнено успешно");
     } // Парсинг и вывод данных
 
-    private void _addItemToTable(int position, String name, String description){
+    private void _addItemToTable(int position, String name, String description) {
         dataTable.add(new ArticleTable(position, name, description));
     } // добавление элемента в массив таблицы
 
     public void clearData(ActionEvent event) {
-        if(event.getEventType() == ActionEvent.ACTION){
+        if (event.getEventType() == ActionEvent.ACTION) {
             companyToLoadData.clear();
             dataTable.clear();
         }
@@ -228,7 +255,7 @@ public class WorkController {
             new File(distDir).mkdirs();
             int countFiles = new File(distDir).listFiles().length;
 
-            if(nameDocumentTemp.equals("")){
+            if (nameDocumentTemp.equals("")) {
                 nameDocumentTemp = " report " + dateDoc + "-(" + countFiles + ")";
             }
 
@@ -245,15 +272,15 @@ public class WorkController {
         }
     } // Создание документа отчёта
 
-    private void _fetchDocumentsLoadToDb(){
+    private void _fetchDocumentsLoadToDb() {
         File checkDir = new File(pathTempDocuments);
 
         File[] dirlist = checkDir.listFiles();
         for (File dir : dirlist) {
             if (dir.isDirectory()) {
                 ArrayList<File> fileList = new ArrayList<>();
-                for(File file : dir.listFiles()){
-                    if(file.isFile()){
+                for (File file : dir.listFiles()) {
+                    if (file.isFile()) {
                         fileList.add(file);
                     }
                 }
@@ -271,15 +298,15 @@ public class WorkController {
                     statement.setString(1, _parent.getNameTelegram());
                     ResultSet existedDocs = statement.executeQuery();
                     ArrayList<File> noSyncFiles = new ArrayList<>();
-                    while (existedDocs.next()){
-                        for(File existedFile: fileList){
-                            if(!existedDocs.getDate("date").equals(dateOfDocument) &&
-                                    !existedDocs.getString("nameDocument").equals(existedFile.getName())){
+                    while (existedDocs.next()) {
+                        for (File existedFile : fileList) {
+                            if (!existedDocs.getDate("date").equals(dateOfDocument) &&
+                                    !existedDocs.getString("nameDocument").equals(existedFile.getName())) {
                                 noSyncFiles.add(existedFile);
                             }
                         }
                     }
-                    for(File existedFile: fileList) {
+                    for (File existedFile : fileList) {
                         FileInputStream inputBlobDoc = new FileInputStream(existedFile);
 
                         PreparedStatement addDocs = dataBase.connection.prepareStatement("INSERT INTO `documents` Values (?, ?, ?, ?)");
@@ -301,12 +328,12 @@ public class WorkController {
     public void filterData(KeyEvent keyEvent) {
         String text = filterText.getText();
         Pattern pattern = Pattern.compile(text);
-        if(keyEvent.getCode() == KeyCode.ENTER){
-            if(dataTable.size() != 0){
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            if (dataTable.size() != 0) {
                 tableArticles.getSelectionModel().clearSelection();
-                tableArticles.getItems().forEach(item ->{
+                tableArticles.getItems().forEach(item -> {
                     Matcher match = pattern.matcher(item.getDescription());
-                    if(match.find()){
+                    if (match.find()) {
                         tableArticles.getSelectionModel().select(item.getPosition());
                     }
                 });
