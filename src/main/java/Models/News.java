@@ -1,4 +1,4 @@
-package Main;
+package Models;
 
 public class News {
 
@@ -63,15 +63,15 @@ public class News {
         this.url_article = url_article;
     }
 
-    public void setRating(int rating){
+    public void setRating(int rating) {
         this.rating = rating;
     }
 
-    public void addRating(int rating){
+    public void addRating(int rating) {
         this.rating += rating;
     }
 
-    public int getRating(){
+    public int getRating() {
         return this.rating;
     }
 } // Класс и методы для работы с новостями

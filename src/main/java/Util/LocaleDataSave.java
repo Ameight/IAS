@@ -9,25 +9,25 @@ import java.nio.file.StandardOpenOption;
 
 public class LocaleDataSave {
 
-    String _dir;
+    String _path;
 
     Object _data;
 
-    public LocaleDataSave(String name, Object data){
-        _dir = name;
+    public LocaleDataSave(String path, Object data) {
+        _path = path;
         _data = data;
     }
 
-    private void _prepareDir(){
-        File file = new File(_dir);
-        if(!file.exists()){
+    private void _prepareDir() {
+        File file = new File(_path);
+        if (!file.exists()) {
             file.getParentFile().mkdirs();
             try {
                 file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             StandardOpenOption[] options = {StandardOpenOption.TRUNCATE_EXISTING};
             try {
                 Files.newBufferedWriter(Paths.get(file.getPath()), options);
@@ -37,27 +37,29 @@ public class LocaleDataSave {
         }
     } // Создание директорий и проверка на дурака
 
-    public void saveExcel(){
-        XSSFWorkbook book = (XSSFWorkbook) _data;
+    public void saveExcel() {
         _prepareDir();
+
+        XSSFWorkbook book = (XSSFWorkbook) _data;
         FileOutputStream out;
         try {
-            out = new FileOutputStream(_dir);
+            out = new FileOutputStream(_path);
             book.write(out);
             out.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    } // получение  разметки и сохрание
+    } // получение  разметки и сохранение
 
-    public void save(){
+    public void save() {
         _prepareDir();
         FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream(_dir);
+            fos = new FileOutputStream(_path);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(_data);
             oos.close();
+            fos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

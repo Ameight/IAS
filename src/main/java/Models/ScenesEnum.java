@@ -1,4 +1,4 @@
-package Main;
+package Models;
 
 public enum  ScenesEnum {
     MAIN, Work

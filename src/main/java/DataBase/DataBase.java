@@ -1,38 +1,26 @@
-package Main;
+package DataBase;
 
 import java.sql.*;
-//
-public class DataBase{
+
+public class DataBase {
 
     public Connection connection;
 
     Statement stmt = null;
-    public DataBase(){
+
+    public DataBase() {
         _connect();
-    } //
+    }
 
-    public Connection getConnection(){
+    public Connection getConnection() {
         return this.connection;
-    } //
+    }
 
-    public ResultSet query(String query){
-        ResultSet rs = null;
-        try {
-            stmt = connection.createStatement();
-            rs =  stmt.executeQuery(query);
-        } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
-        }
-        return rs;
-    } // Выполнение SQL запроса
-
-    public boolean execute(String query){
+    public boolean execute(String query) {
         boolean rs = false;
         try {
             stmt = connection.createStatement();
-            rs =  stmt.execute(query);
+            rs = stmt.execute(query);
         } catch (SQLException ex) {
             System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
@@ -41,7 +29,7 @@ public class DataBase{
         return rs;
     } // Обработка на ошибки
 
-    public void _defaultInit(){
+    public void _defaultInit() {
         this.execute("CREATE DATABASE IF NOT EXISTS dataDocs");
         try {
             this.connection.setSchema("dataDocs");
@@ -62,14 +50,12 @@ public class DataBase{
                 ") ENGINE=MyISAM;");
     } // Создание таблицы
 
-    private void _connect(){
+    private void _connect() {
         try {
-            connection =
+            this.connection =
                     DriverManager.getConnection("jdbc:mysql://localhost/dataDocs?" +
                             "user=root&password=qwerty");
-            this.connection.setSchema("dataDocs");
         } catch (SQLException ex) {
-            // handle any errors
             System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());

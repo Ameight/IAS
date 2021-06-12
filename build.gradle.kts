@@ -8,8 +8,8 @@ plugins {
 version = "1.0"
 
 sourceSets.main {
-    java.srcDirs("src/main/Main", "src/main/Controllers", "src/main/Models", "src/main/Util")
-    resources.srcDirs("src/main/resources/css", "src/main/resources/Fxml")
+    java.srcDirs("src/main/java")
+    resources.srcDirs("src/main/resources")
 } // исходники
 
 repositories {
@@ -39,6 +39,10 @@ configure<JavaPluginConvention> {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+tasks.processResources{
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
 tasks.jar {
     manifest {
         attributes(
@@ -52,7 +56,6 @@ tasks.jar {
 
 tasks.register<Jar>("buildFatJar") {
     dependsOn(tasks.build)
-    // shouldRunAfter(parent!!.tasks["prepCopyJsBundleToKtor"]) -> This is for incorporating KotlinJS gradle subproject resulting js file.
     manifest {
         attributes["Main-Class"] = application.mainClass.get()
     }

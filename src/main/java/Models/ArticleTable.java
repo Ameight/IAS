@@ -16,11 +16,11 @@ public class ArticleTable {
     }
 
     public int getPosition() {
-        return this.position .get();
+        return this.position.get();
     }
 
     public void setPosition(int nameCompany) {
-        this.position .set(nameCompany);
+        this.position.set(nameCompany);
     }
 
     public String getNameCompany() {

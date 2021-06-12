@@ -17,21 +17,24 @@ import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 
-import Main.ScenesEnum;
+import Models.ScenesEnum;
 
 public class AuthPageController {
 
+    @FXML
     public Button startBut;
+
     @FXML
     GridPane mainPane;
+
     Main _parent;
 
-    public void attachMainClass(Main main){
+    public void attachMainClass(Main main) {
         _parent = main;
     }
 
     @FXML
-    private void startWork(){
+    private void startWork() {
         try {
             _parent.setStage(ScenesEnum.Work);
         } catch (IOException e) {
@@ -40,8 +43,7 @@ public class AuthPageController {
     } // обработка кнопки "начать работу"
 
     @FXML
-    public void syncWithTelegram(ActionEvent event){
-
+    public void syncWithTelegram(ActionEvent event) {
         Stage stage = new Stage();
         Parent root = null;
         try {
@@ -55,14 +57,13 @@ public class AuthPageController {
         stage.setTitle("Синхронизировать с Telegram");
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(
-                ((Node)event.getSource()).getScene().getWindow() );
+                ((Node) event.getSource()).getScene().getWindow());
         stage.getIcons().add(new Image("/iconsyn.png"));
         stage.show();
-
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
-                _parent.setNameTelegram((String)modalScene.getUserData());
+                _parent.setNameTelegram((String) modalScene.getUserData());
             }
         });
     } // функционал синхронизации с телегой

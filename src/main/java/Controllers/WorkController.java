@@ -3,14 +3,12 @@ package Controllers;
 import Main.Main;
 import Models.ArticleTable;
 import Models.InputNames;
-import Main.DataBase;
-import Main.News;
-import Main.Parser;
-import Main.XLSXGenerator;
+import DataBase.DataBase;
+import Models.News;
+import Parser.Parser;
+import XLSX.XLSXGenerator;
 import Util.LocaleDataOpen;
 import Util.LocaleDataSave;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -35,6 +33,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class WorkController {
 
@@ -84,7 +83,6 @@ public class WorkController {
 
     private void _initInputNames() {
         if (!_checkBdProperties()) {
-            //System.out.println("Heere !! ! ");
             LocaleDataOpen localeDataOpen = new LocaleDataOpen(pathTempInputNames);
             Object tmp = localeDataOpen.getData();
             if (tmp != null) {
@@ -116,7 +114,9 @@ public class WorkController {
 
     private void _updateInputNames() {
         inputNameCompany.getItems().clear();
-        inputNameCompany.getItems().addAll(names);
+        inputNameCompany.getItems().addAll(names.stream()
+                .sorted(Comparator.reverseOrder())
+                .collect(Collectors.toList()));
     } // Обновление истории запросов
 
     public void attachMainClass(Main main) {
@@ -141,17 +141,18 @@ public class WorkController {
         tableArticles.setRowFactory(new Callback<TableView<ArticleTable>, TableRow<ArticleTable>>() {
             @Override
             public TableRow<ArticleTable> call(TableView<ArticleTable> param) {
-                return new TableRow<ArticleTable>(){
+                return new TableRow<ArticleTable>() {
                     @Override
                     protected void updateItem(ArticleTable item, boolean empty) {
                         super.updateItem(item, empty);
-                        if(!empty){
+                        if (!empty) {
+                            getStyleClass().clear();
                             int tempRating = parsedData.get(item.getPosition()).getRating();
-                            if(tempRating >= 100){
+                            if (tempRating >= 100) {
                                 getStyleClass().add("goodCompany");
                                 return;
                             }
-                            if(tempRating >= 50){
+                            if (tempRating >= 50) {
                                 getStyleClass().add("averageCompany");
                                 return;
                             }
@@ -242,6 +243,7 @@ public class WorkController {
         if (event.getEventType() == ActionEvent.ACTION) {
             companyToLoadData.clear();
             dataTable.clear();
+            parsedData.clear();
         }
     } // Очистка полей
 

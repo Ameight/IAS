@@ -1,10 +1,10 @@
 package Main;
 
-import Analysis.CheckAge;
 import Controllers.AuthPageController;
-import Controllers.AuthPageScene;
+import Models.ScenesEnum;
+import Scenes.AuthPageScene;
 import Controllers.WorkController;
-import Controllers.WorkScene;
+import Scenes.WorkScene;
 import Util.LocaleDataOpen;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -12,35 +12,29 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.*;
-import java.util.Date;
-
 
 public class Main extends Application {
-    Stage _primaryStage; //главный элемент в javafx
-// djn
+    Stage _primaryStage;
+
     static String nameTelegram;
 
-    public String getNameTelegram(){
+    public String getNameTelegram() {
         return nameTelegram;
     }
 
-    public void setNameTelegram(String name){
+    public void setNameTelegram(String name) {
         nameTelegram = name;
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver"); // подклоючение MYSQL драйвер в случае запуска вне IDE
-        }
-        catch (ClassNotFoundException e) {
+            Class.forName("com.mysql.cj.jdbc.Driver"); // подключение MYSQL драйвер в случае запуска вне IDE
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
-
-
-        LocaleDataOpen load = new LocaleDataOpen("tmp/nameTelegram.txt"); // Локальное сохранение файлов
+        LocaleDataOpen load = new LocaleDataOpen("tmp/nameTelegram.txt");
         String loadedTelegram = (String) load.getData();
         nameTelegram = loadedTelegram;
         System.out.println("TelegramID: " + nameTelegram);
@@ -48,7 +42,7 @@ public class Main extends Application {
         launch(args); // запуск метода start javaFx
     }
 
-    private FXMLLoader _loadScene(String name){
+    private FXMLLoader _loadScene(String name) {
         FXMLLoader loader;
         loader = new FXMLLoader(getClass().getResource(name));
         return loader;
@@ -56,9 +50,9 @@ public class Main extends Application {
 
     public void setStage(ScenesEnum scenesEnum) throws IOException {
         FXMLLoader loader;
-        switch (scenesEnum){
-            case MAIN:{
-                //_primaryStage.getIcons().add(new Image("/icon.png"));
+        switch (scenesEnum) {
+            case MAIN: {
+                _primaryStage.getIcons().add(new Image("/icon.png"));
                 loader = _loadScene("/Fxml/AuthPage.fxml");
                 _primaryStage.setTitle("Информационная аналитическая система ");
                 VBox root = loader.load();
@@ -68,7 +62,8 @@ public class Main extends Application {
                 _primaryStage.show();
                 break;
             } // главная форма
-            case Work:{
+            case Work: {
+
                 loader = _loadScene("/Fxml/Work.fxml");
                 _primaryStage.setTitle("Поиск компаний");
                 VBox root = loader.load();
@@ -85,7 +80,5 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         _primaryStage = primaryStage;
         setStage(ScenesEnum.MAIN);
-
-        _primaryStage.getIcons().add(new Image("/icon.png"));
-    } // функция start
+    }
 }

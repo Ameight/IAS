@@ -9,41 +9,51 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="genPa" stylesheets="css/AuthPage.css" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AuthPageController">
+<VBox stylesheets="css/AuthPage.css" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AuthPageController">
     <children>
-        <Label styleClass="label-main" alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" text="Cистема сбора данных">
+        <Label styleClass="label-main" alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity"
+               text="Cистема сбора данных">
             <font>
-                <Font size="32.0" />
+                <Font size="32.0"/>
             </font>
             <VBox.margin>
-                <Insets bottom="10.0" top="10.0" />
+                <Insets bottom="10.0" top="10.0"/>
             </VBox.margin>
         </Label>
         <GridPane fx:id="mainPane" alignment="CENTER" cacheShape="false" prefHeight="363.0" prefWidth="579.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="283.0" minWidth="10.0" prefWidth="173.59998741149903" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="418.0" minWidth="10.0" prefWidth="248.00000000000003" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="418.0" minWidth="10.0" prefWidth="173.60000000000002" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="283.0" minWidth="10.0" prefWidth="173.59998741149903"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="418.0" minWidth="10.0" prefWidth="248.00000000000003"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="418.0" minWidth="10.0" prefWidth="173.60000000000002"/>
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints maxHeight="115.99999771118163" minHeight="10.0" prefHeight="98.39999160766601" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="106.40003967285156" minHeight="0.0" prefHeight="47.599948120117205" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="128.0" minHeight="10.0" prefHeight="102.00005187988279" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="115.99999771118163" minHeight="10.0" prefHeight="98.39999160766601"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="106.40003967285156" minHeight="0.0" prefHeight="47.599948120117205"
+                                vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="128.0" minHeight="10.0" prefHeight="102.00005187988279" vgrow="SOMETIMES"/>
             </rowConstraints>
             <children>
-                <Button fx:id="startBut" styleClass="primary" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#startWork" prefHeight="30.0" prefWidth="214.0" text="Начать Работу" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                <Button fx:id="startBut" styleClass="primary" alignment="CENTER" contentDisplay="CENTER"
+                        mnemonicParsing="false" onAction="#startWork" prefHeight="30.0" prefWidth="214.0"
+                        text="Начать Работу" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1"
+                        GridPane.valignment="CENTER">
                     <font>
-                        <Font size="14.0" />
+                        <Font size="14.0"/>
                     </font>
                 </Button>
-            <Button onAction="#syncWithTelegram" styleClass="primary" mnemonicParsing="false" prefHeight="30.0" prefWidth="218.0" text="Синхронизировать с Telegram" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Button>
+                <Button onAction="#syncWithTelegram" styleClass="primary" mnemonicParsing="false" prefHeight="30.0"
+                        prefWidth="218.0" text="Синхронизировать с Telegram" GridPane.columnIndex="1"
+                        GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Button>
             </children>
             <VBox.margin>
-                <Insets left="10.0" right="10.0" />
+                <Insets left="10.0" right="10.0"/>
             </VBox.margin>
         </GridPane>
     </children>
