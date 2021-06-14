@@ -14,6 +14,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -169,7 +170,8 @@ public class WorkController {
     @FXML
     public void submit(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
-            names.add(inputNameCompany.getEditor().getText());
+            String tempText = inputNameCompany.getEditor().getText();
+            names.add(tempText);
             if (!_checkBdProperties()) {
                 LocaleDataSave save = new LocaleDataSave(pathTempInputNames, names);
                 save.save();
@@ -195,7 +197,7 @@ public class WorkController {
                     Parser parser = new Parser();
                     List<News> tempNews = null;
                     try {
-                        tempNews = parser.get_news(inputNameCompany.getEditor().getText());
+                        tempNews = parser.get_news(tempText);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
