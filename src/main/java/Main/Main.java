@@ -54,7 +54,7 @@ public class Main extends Application {
             case MAIN: {
                 _primaryStage.getIcons().add(new Image("/icon.png"));
                 loader = _loadScene("/Fxml/AuthPage.fxml");
-                _primaryStage.setTitle("Информационная аналитическая система ");
+                _primaryStage.setTitle("Информационно - аналитическая система");
                 VBox root = loader.load();
                 AuthPageController controller = loader.getController();
                 controller.attachMainClass(this);
